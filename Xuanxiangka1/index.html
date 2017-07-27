@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>面向对象选项卡</title>
+		<script type="text/javascript" src="js/mxdx.js"></script>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			
+			#tab1 {
+				width: 293px;
+				height: 340px;
+				border: 1px solid #000000;
+				margin: 0 auto;
+			}
+			
+			#tab2 {
+				width: 293px;
+				height: 340px;
+				border: 1px solid #000000;
+				margin: 0 auto;
+				margin-top: 100px;
+			}
+			
+			input {
+				width: 100px;
+				height: 50px;
+				margin: -3px;
+				
+			}
+			
+			.active {
+				background-color: #666666;
+			}
+			
+			#tab1 div {
+				height: 300px;
+				position: relative;
+				display: none;
+				background: #2196F3;
+				font-size: 100px;
+				text-align: center;
+				line-height: 250px;
+			}
+			
+			#tab2 div {
+				height: 300px;
+				position: relative;
+				display: none;
+				background: #2196F3;
+				font-size: 100px;
+				text-align: center;
+				line-height: 250px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="tab1">
+			<input type="button" value="1" class="active">
+			<input type="button" value="2">
+			<input type="button" value="3">
+			<div style="display: block">111</div>
+			<div>222</div>
+			<div>333</div>
+		</div>
+
+		<div id="tab2">
+			<input type="button" value="1" class="active">
+			<input type="button" value="2">
+			<input type="button" value="3">
+			<div style="display: block">111</div>
+			<div>222</div>
+			<div>333</div>
+		</div>
+		<script>
+			function Tab(id) {
+				this.doc = document;
+				this.tab = this.doc.getElementById(id);
+				this.aBtn = this.tab.getElementsByTagName('input');
+				this.aDiv = this.tab.getElementsByTagName('div');
+				this.iNow = 0;
+			}
+
+			Tab.prototype.init = function() {
+				var This = this;
+				for(var i = 0, len = this.aBtn.length; i < len; i++) {
+					this.aBtn[i].index = i;
+					this.aBtn[i].onclick = function() {
+						This.change(this);
+					}
+				}
+			}
+
+			Tab.prototype.change = function(obj) {
+				for(var j = 0, len = this.aBtn.length; j < len; j++) {
+					this.aBtn[j].className = '';
+					this.aDiv[j].style.display = 'none';
+				}
+
+				this.aBtn[obj.index].className = 'active';
+				this.aDiv[obj.index].style.display = 'block';
+			}
+
+			Tab.prototype.autoplay = function() {
+				var This = this;
+				setInterval(function() {
+
+					for(var i = 0, len = This.aBtn.length; i < len; i++) {
+						This.aBtn[i].className = '';
+						This.aDiv[i].style.display = 'none';
+					}
+
+					This.aBtn[This.iNow].className = 'active';
+					This.aDiv[This.iNow].style.display = 'block';
+					This.iNow++;
+
+					This.iNow > 2 ? This.iNow = This.iNow % This.aBtn.length : This.iNow;
+
+				}, 1000)
+			}
+
+			var tab1 = new Tab('tab1');
+			tab1.init();
+
+			var tab2 = new Tab('tab2');
+			// 复用原来的组件
+			tab2.init();
+			// 在原来的组件基础上，增加自动播放功能
+			tab2.autoplay();
+		</script>
+	</body>
+
+</html>
